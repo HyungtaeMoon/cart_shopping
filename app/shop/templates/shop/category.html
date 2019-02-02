@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+        Welcome to our site. Enjoy your time
+    {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+        {{ category.name }} - Perfect Cushion Store
+    {% else %}
+        See our Store later
+    {% endif %}
+{% endblock %}
+{% block content %}
+    {% if category %}
+        <div>
+            <div>
+                <p><a href="{% url 'shop:allProdCat' %}">Our Product Collection</a> | {{ category.name }}</p>
+            </div>
+        </div>
+    {% endif %}
+    <div>
+        {% if category %}
+            <img src="{{ category.img.url }}" alt="">
+            </div>
+            <br>
+            <div>
+                <h1>{{ category.name }}</h1>
+                <p>{{ category.description }}</p>
+            </div>
+        {% else %}
+            <img src="{% static 'img/banner.jpg' %}" alt="Our Product Collection">
+            </div>
+            <br>
+            <div>
+                <h1>Our Product Site</h1>
+                <p>Under the Mughal Empire, which ruled in the Indian subcontinent from the early 16th century to the early 18th century, Indian cotton production increased, in terms of both raw cotton and cotton textiles. The Mughals introduced agrarian reforms such as a new revenue system that was biased in favour of higher value cash crops such as cotton and indigo, providing state incentives to grow cash crops, in addition to rising market demand.</p>
+            </div>
+        {% endif %}
+    <div>
+        <div>
+            {% for product in products %}
+                <div>
+                    <div>
+                        <a href="#"><div><img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 150px; height: 150px;"></div></a>
+                        <div>
+                            <h4>{{ product.name }}</h4>
+                            <h5>$ {{ product.price }}</h5>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

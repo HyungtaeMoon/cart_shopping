@@ -1,0 +1,17 @@
+{% load staticfiles %}
+
+<!Doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="description" content="{% block metadescription %}{% endblock %}">
+<title>{% block title %}{% endblock %}</title>
+<body>
+<div>
+    {% include "header.html" %}
+    {% include "navbar.html" %}
+    {% block content %}
+    {% endblock %}
+</div>
+{% include "footer.html" %}
+</body>
+</html>
