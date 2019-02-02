@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Category(models.Model):
@@ -15,6 +16,10 @@ class Category(models.Model):
         ordering = ('name',)
         verbose_name = 'category'
         verbose_name_plural = 'categories'
+
+    def get_url(self):
+        # Category 에 해당하는 모든 카테고리들의 slug 필드 값을 리턴
+        return reverse('shop:products_by_category', args=[self.slug])
 
     def __str__(self):
         return self.name

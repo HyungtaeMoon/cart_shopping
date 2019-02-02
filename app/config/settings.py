@@ -65,6 +65,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # dict: <QuerySet> 타입의 dict 타입으로 리턴된 값
+                'shop.context_processors.menu_links',
             ],
         },
     },

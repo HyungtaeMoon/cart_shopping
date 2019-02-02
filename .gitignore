@@ -5,6 +5,7 @@
 /.secrets
 
 # Django Static files path
+app/static
 /.static
 /.media
 
