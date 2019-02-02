@@ -23,6 +23,7 @@ from shop import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
+    path('shop/', include('shop.urls'))
 ]
 if settings.DEBUG:
     urlpatterns += static(prefix=settings.STATIC_URL, document_root=settings.STATIC_ROOT)
