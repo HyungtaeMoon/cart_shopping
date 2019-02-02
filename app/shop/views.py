@@ -31,3 +31,14 @@ def allProdCat(request, c_slug=None):
     # context 에 c_page 가 있으면 category 와 매핑하여 보여주고
     #   없으면 이용가능한 모든 상품을 렌더 시켜줌
     return render(request, 'shop/category.html', {'category': c_page, 'products': products})
+
+
+def product_cat_detail(request, c_slug, product_slug):
+    try:
+        # Category 에 해당하는 Product 객체만 보여줘야 하기 때문에 아래의 2가지 조건에 맞는 객체들만 할당
+        #   1. Category <-- Product (FK) 에 의해 category__slug 로 접근하여 c_slug 매칭
+        #   2. Product.objects.get(slug=product_slug) 를 매칭
+        product = Product.objects.get(category__slug=c_slug, slug=product_slug)
+    except Exception as e:
+        raise e
+    return render(request, 'shop/product-detail.html', {'product': product})
