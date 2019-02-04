@@ -17,37 +17,37 @@
 {% endblock %}
 {% block content %}
     {% if category %}
-        <div>
-            <div>
+        <div class="row my_row_class">
+            <div class="mx-auto">
                 <p><a href="{% url 'shop:allProdCat' %}">Our Product Collection</a> | {{ category.name }}</p>
             </div>
         </div>
     {% endif %}
-    <div>
+    <div class="mx-auto">
         {% if category %}
-            <img src="{{ category.img.url }}" alt="">
+            <img class="my_image" src="{{ category.img.url }}" alt="">
             </div>
             <br>
             <div>
-                <h1>{{ category.name }}</h1>
-                <p>{{ category.description }}</p>
+                <h1 class="text-center my_title">{{ category.name }}</h1>
+                <p class="text-justify">{{ category.description }}</p>
             </div>
         {% else %}
-            <img src="{% static 'img/banner.jpg' %}" alt="Our Product Collection">
+            <img class="my_image my_image_padding" src="{% static 'img/banner.jpg' %}" alt="Our Product Collection">
             </div>
             <br>
             <div>
-                <h1>Our Product Site</h1>
-                <p>Under the Mughal Empire, which ruled in the Indian subcontinent from the early 16th century to the early 18th century, Indian cotton production increased, in terms of both raw cotton and cotton textiles. The Mughals introduced agrarian reforms such as a new revenue system that was biased in favour of higher value cash crops such as cotton and indigo, providing state incentives to grow cash crops, in addition to rising market demand.</p>
+                <h1 class="text-center my_title">Our Product Site</h1>
+                <p class="text-justify">Under the Mughal Empire, which ruled in the Indian subcontinent from the early 16th century to the early 18th century, Indian cotton production increased, in terms of both raw cotton and cotton textiles. The Mughals introduced agrarian reforms such as a new revenue system that was biased in favour of higher value cash crops such as cotton and indigo, providing state incentives to grow cash crops, in addition to rising market demand.</p>
             </div>
         {% endif %}
-    <div>
-        <div>
+    <div class="container">
+        <div class="row mx-auto">
             {% for product in products %}
-                <div>
-                    <div>
-                        <a href="{{ product.get_url }}"><img src="{{ product.image.url }}" alt="{{ product.name }}"></a>
-                        <div>
+                <div class="my_botton_margin col-sm-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
+                    <div class="card text-center" style="min-width: 18rem;">
+                        <a href="{{ product.get_url }}"><img class="card-img-top my_image" src="{{ product.image.url }}" alt="{{ product.name }}"></a>
+                        <div class="card-body">
                             <h4>{{ product.name }}</h4>
                             <p>$ {{ product.price }}</p>
                         </div>
