@@ -43,7 +43,7 @@
         {% endif %}
     <div class="container">
         <div class="row mx-auto">
-            {% for product in products %}
+            {% for product in products.object_list %}
                 <div class="my_botton_margin col-sm-9 col-sm-12 col-md-4 col-md-12 col-lg-4">
                     <div class="card text-center" style="min-width: 18rem;">
                         <a href="{{ product.get_url }}"><img class="card-img-top my_image" src="{{ product.image.url }}" alt="{{ product.name }}"></a>
@@ -54,6 +54,16 @@
                     </div>
                 </div>
             {% endfor %}
+        </div>
+        <div class="mx-auto">
+            {% if products.paginator.num_pages > 1 %}
+                <hr>
+                <div class="text-center">
+                    {% for pg in products.paginator.page_range %}
+                        <a href="?page={{ pg }}" class="btn btn-light btn-sm {% if products.number == pg %}active{% endif %}">{{ pg }}</a>
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
     </div>
 
