@@ -6,6 +6,7 @@
 
 # Django Static files path
 app/static
+app/staticfiles
 /.static
 /.media
 
