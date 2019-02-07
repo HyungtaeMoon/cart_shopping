@@ -30,6 +30,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_extensions',
+    
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -70,6 +72,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # dict: <QuerySet> 타입의 dict 타입으로 리턴된 값
                 'shop.context_processors.menu_links',
+                # CartItem 이 있으면 +1 하는 함수 정의, 템플릿에 바로 적용 가능
+                'cart.context_processors.counter',
             ],
         },
     },

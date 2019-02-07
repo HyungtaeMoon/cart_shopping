@@ -59,5 +59,6 @@ def product_cat_detail(request, c_slug, product_slug):
         #   2. Product.objects.get(slug=product_slug) 를 매칭
         product = Product.objects.get(category__slug=c_slug, slug=product_slug)
     except Exception as e:
+        print(f'에러 발생')
         raise e
     return render(request, 'shop/product-detail.html', {'product': product})
