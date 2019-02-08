@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from config import settings
 from shop.models import Product
 from .models import Cart, CartItem
+from order.models import Order, OrderItem
 import stripe
 
 
@@ -77,9 +78,20 @@ def cart_detail(request, total=0, counter=0, cart_items=None):
     description = 'Perfect Cushion Shop - Order'
     data_key = settings.STRIPE_PUBLISHABLE_KEY
     if request.method == 'POST':
+        '''stripe 결제 form 의 endpoint 에 아래의 파라미터가 전달되므로 정확한 영문 입력 request.POST['']'''
         try:
             token = request.POST['stripeToken']
             email = request.POST['stripeEmail']
+            billingName = request.POST['stripeBillingName']
+            billingAddress1 = request.POST['stripeBillingAddressLine1']
+            billingCity = request.POST['stripeBillingAddressCity']
+            billingPostcode = request.POST['stripeBillingAddressZip']
+            billingCountry = request.POST['stripeBillingAddressCountryCode']
+            shippingName = request.POST['stripeShippingName']
+            shippingAddress1 = request.POST['stripeShippingAddressLine1']
+            shippingCity = request.POST['stripeShippingAddressCity']
+            shippingPostccode = request.POST['stripeShippingAddressZip']
+            shippingCountry = request.POST['stripeShippingAddressCountryCode']
             customer = stripe.Customer.create(
                 email=email,
                 source=token
@@ -90,6 +102,43 @@ def cart_detail(request, total=0, counter=0, cart_items=None):
                 description=description,
                 customer=customer.id
             )
+            '''Creating the order'''
+            try:
+                order_details = Order.objects.create(
+                    token=token,
+                    total=total,
+                    emailAddress=email,
+                    billingName=billingName,
+                    billingAddress1=billingAddress1,
+                    billingCity=billingCity,
+                    billingPostcode=billingPostcode,
+                    billingCountry=billingCountry,
+                    shippingName=shippingName,
+                    shippingAddress1=shippingAddress1,
+                    shippingCity=shippingCity,
+                    shippingPostcode=shippingPostccode,
+                    shippingCountry=shippingCountry
+                )
+                order_details.save()
+                for order_item in cart_items:
+                    oi = OrderItem.objects.create(
+                        product=order_item.product.name,
+                        quantity=order_item.product.stock,
+                        price=order_item.product.price,
+                        order=order_details
+                    )
+                    oi.save()
+                    '''Reduce stock when order is placed or saved'''
+                    product = Product.objects.get(id=order_item.product.id)
+                    product.stock = int(order_item.product.stock - order_item.quantity)
+                    product.save()
+                    order_item.delete()
+                    '''The terminal will this message when the order is saved'''
+                    print('The order has been created')
+                return redirect('shop:allProdCat')
+            except ObjectDoesNotExist:
+                pass
+
         except stripe.error.CardError as e:
             return False, e
 
