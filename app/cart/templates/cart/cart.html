@@ -103,6 +103,21 @@
                     </tbody>
                 </table>
                 <div class="container">
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <script
+                                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                data-key="{{ data_key }}"
+                                data-amount="{{ stripe_total }}"
+                                data-name="Perfect Cushion Store"
+                                data-description="{{ description }}"
+                                data-image="{% static 'img/logo.png' %}"
+                                data-locale="auto"
+                                data-shipping-address="true"
+                                data-billing-address="true"
+                                data-zip-code="true">
+                        </script>
+                    </form>
                     <a href="{% url 'shop:allProdCat' %}" class="btn btn-secondary btn-block my_custom_button">Continue Shopping</a>
                 </div>
             </div>
