@@ -9,6 +9,7 @@ pillow = "*"
 ipython = "*"
 django-extensions = "*"
 stripe = "*"
+django-crispy-forms = "*"
 
 [dev-packages]
 

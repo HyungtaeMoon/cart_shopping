@@ -1,7 +1,9 @@
+from django.contrib.auth.models import Group, User
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 
+from .forms import SignUpForm
 from .models import Category, Product
 
 
@@ -62,3 +64,18 @@ def product_cat_detail(request, c_slug, product_slug):
         print(f'에러 발생')
         raise e
     return render(request, 'shop/product-detail.html', {'product': product})
+
+
+def signup_view(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            signup_user = User.objects.get(username=username)
+            # admin 페이지에서 Customer Group 를 추가하여 고객 정보를 따로 관리
+            customer_group = Group.objects.get(name='Customer')
+            customer_group.user_set.add(signup_user)
+    else:
+        form = SignUpForm()
+    return render(request, 'accounts/signup.html', {'form': form})
