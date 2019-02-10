@@ -1,7 +1,9 @@
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group, User
 from django.core.paginator import Paginator, EmptyPage, InvalidPage
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from .forms import SignUpForm
 from .models import Category, Product
@@ -79,3 +81,19 @@ def signup_view(request):
     else:
         form = SignUpForm()
     return render(request, 'accounts/signup.html', {'form': form})
+
+
+def login_view(request):
+    form = AuthenticationForm(data=request.POST)
+    if form.is_valid():
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('shop:allProdCat')
+        else:
+            return redirect('login')
+    else:
+        form = AuthenticationForm()
+    return render(request, 'accounts/login.html', {'form': form})

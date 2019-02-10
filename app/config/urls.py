@@ -27,7 +27,8 @@ urlpatterns = [
     path('search_app/', include('search_app.urls')),
     path('cart/', include('cart.urls')),
     path('order/', include('order.urls')),
-    path('signup/create/', views.signup_view, name='signup'),
+    path('accounts/create/', views.signup_view, name='signup'),
+    path('accounts/login/', views.login_view, name='login'),
 ]
 if settings.DEBUG:
     urlpatterns += static(prefix=settings.STATIC_URL, document_root=settings.STATIC_ROOT)
