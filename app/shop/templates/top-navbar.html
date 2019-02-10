@@ -6,7 +6,7 @@
                     Welcome {{ request.user.first_name }} <i class="fas fa-user-circle"></i>
                 </li>
                 <li>
-                    <a href="#">Logout <i class="fas fa-sign-out-alt"></i></a>
+                    <a href="{% url 'logout' %}">Logout <i class="fas fa-sign-out-alt"></i></a>
                 </li>
             {% else %}
                 <li>
