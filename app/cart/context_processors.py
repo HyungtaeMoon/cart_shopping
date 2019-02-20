@@ -19,7 +19,7 @@ def counter(request):
             cart_items = CartItem.objects.all().filter(cart=cart[:1])
             for cart_item in cart_items:
                 item_count += cart_item.quantity
-                print(f'각각의 아이템을 순회하며 item_count 에 + 1 [추가(조회)상품]({cart_item.product}:{cart_item.quantity})')
+                # print(f'각각의 아이템을 순회하며 item_count 에 + 1 [추가(조회)상품]({cart_item.product}:{cart_item.quantity})')
         except Cart.DoesNotExist:
             item_count = 0
     return dict(item_count=item_count)

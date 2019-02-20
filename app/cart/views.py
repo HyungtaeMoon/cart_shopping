@@ -1,5 +1,7 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import EmailMessage
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import get_template
 
 from config import settings
 from shop.models import Product
@@ -135,6 +137,12 @@ def cart_detail(request, total=0, counter=0, cart_items=None):
                     order_item.delete()
                     '''The terminal will this message when the order is saved'''
                     print('The order has been created')
+                try:
+                    '''Calling the sendEmail function'''
+                    send_email(order_details.id)
+                    print('The order has been sent to the customer')
+                except IOError as e:
+                    return e
                 return redirect('order:thanks', order_details.id)
             except ObjectDoesNotExist:
                 pass
@@ -174,3 +182,28 @@ def full_remove(request, product_id):
     cart_item = CartItem.objects.get(product=product, cart=cart)
     cart_item.delete()
     return redirect('cart:cart_detail')
+
+
+def send_email(order_id):
+    '''
+    1) Product -> OrderItem 생성
+    2) product.stock -1 , product.save(), orderitem.delete()
+    3) 이후에 아래의 메서드가 실행됨(즉, 상품의 구매가 이루어지는 모든 과정이 완료된 이후에 고객에게 메일을 보냄)
+    '''
+    transaction = Order.objects.get(id=order_id)
+    order_items = OrderItem.objects.filter(order=transaction.id)
+    try:
+        '''Sending the order to the customer'''
+        subject = 'Perfect Cushion Store - New order #{}'.format(transaction.id)
+        to = ['{}'.format(transaction.emailAddress)]
+        from_email = settings.EMAIL_HOST_USER
+        order_information = {
+            'transaction': transaction,
+            'order_items': order_items
+        }
+        message = get_template('email/email.html').render(order_information)
+        msg = EmailMessage(subject, message, to=to, from_email=from_email)
+        msg.content_subtype = 'html'
+        msg.send()
+    except IOError as e:
+        return e
